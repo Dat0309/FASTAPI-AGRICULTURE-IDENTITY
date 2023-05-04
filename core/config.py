@@ -1,9 +1,9 @@
 import os
 
-from dotenv import load_dotenv
+from dotenv import read_dotenv
 from pydantic import BaseSettings
 
-load_dotenv(dotenv_path='../../env/face-recognition.env')
+read_dotenv(dotenv='../../env/agriculture-product-identities-app.env')
 
 
 class CommonSettings(BaseSettings):
@@ -11,28 +11,28 @@ class CommonSettings(BaseSettings):
 
 
 class ServerSettings(BaseSettings):
-    HOST: str = '0.0.0.0'
-    PORT: int = 8000
+    HOST: str = 'localhost'
+    PORT: int = 8080
 
 class ConstValue(BaseSettings):
     MAX_ELEMENTS = 100000
 
 class DatabaseSettings(BaseSettings):
     DB_URL: str = os.environ.get(
-        'MONGODB_URL', 'mongodb+srv://dbRon:Long12345@cluster0.w09ru.mongodb.net/test')
-    DB_NAME: str = os.environ.get('MONGODB_NAME', 'face_recognition_db')
+        'MONGODB_URL', 'mongodb+srv://admin:admin@training.lhxn7pm.mongodb.net/training?retryWrites=true&w=majority')
+    DB_NAME: str = os.environ.get('MONGODB_NAME', 'training_agriculture')
 
 
 class CloudinarySettings(BaseSettings):
-    CLOUD_NAME: str = os.environ.get('CLOUD_NAME', 'dlu')
-    API_KEY: str = os.environ.get('API_KEY', '471522412694188')
+    CLOUD_NAME: str = os.environ.get('CLOUD_NAME', 'devdaz')
+    API_KEY: str = os.environ.get('API_KEY', '144841165449925')
     API_SECRET: str = os.environ.get(
-        'API_SECRET', 'aQAwuL0JbMk0zjnCdcEAco1a6M0')
-    STORE: str = 'videos/trains'
+        'API_SECRET', '4rblDOdRmkYaXmopzRlJ3dXJ0NQ')
+    STORE: str = 'images'
 
 
 class RedisSettings(BaseSettings):
-    REDIS_URL: str = os.environ.get('REDIS_URL', 'redis://redis:6379')
+    REDIS_URL: str = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')
 
 
 class Settings(

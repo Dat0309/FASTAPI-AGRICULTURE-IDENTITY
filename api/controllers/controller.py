@@ -1,3 +1,3 @@
-from .face_recognition import FaceRecognitionController
+from .agriculture_recognition import AgricultureRecognitionController
 
-faceRecognitionCtrl = FaceRecognitionController()
+agricultureRecognitionCtrl = AgricultureRecognitionController()

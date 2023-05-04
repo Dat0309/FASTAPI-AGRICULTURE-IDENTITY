@@ -1,5 +1,5 @@
 from core.celery import celery
-from api.controllers.controller import faceRecognitionCtrl
+from api.controllers.controller import agricultureRecognitionCtrl
 import base64
 from db.database_utils import connect_to_mongo,close_mongo_connection
 import cloudinary
@@ -12,19 +12,19 @@ cloudinary.config(
     api_secret=settings.API_SECRET
 )
 
-async def processing(video_bytes,username, option, info):
+async def processing(video_bytes,name, option, info):
     await connect_to_mongo()
-    await faceRecognitionCtrl.train(
+    await agricultureRecognitionCtrl.train(
         bytes.fromhex(video_bytes), 
-        username,
+        name,
         option,
         info
     )
     await close_mongo_connection()
 
 @celery.task()
-def task_train(video_bytes,username, option, info):
-    async_to_sync(processing)(video_bytes, username, option, info)
+def task_train(video_bytes,name, option, info):
+    async_to_sync(processing)(video_bytes, name, option, info)
 
 @celery.task()
 def add(a,b):
