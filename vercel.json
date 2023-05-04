@@ -12,10 +12,6 @@
         {
             "src": "/(.*)",
             "headers": {
-                "content-length": {
-                  "match": ".*",
-                  "value": "$1"
-                },
                 "content-type": "application/octet-stream",
                 "x-vercel-max-allowed-size": "50mb"
               },
