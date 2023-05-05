@@ -1,7 +1,7 @@
 {
     "version": 2,
     "builds": [{
-        "src": "fast-api/asgi.py",
+        "src": "main.py",
         "use": "@vercel/python",
         "config": {
             "runtime": "python3.9",
@@ -15,7 +15,7 @@
                 "content-type": "application/octet-stream",
                 "x-vercel-max-allowed-size": "50mb"
               },
-            "dest": "fast-api/asgi.py",
+            "dest": "main.py",
             "methods":["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"]
         }
     ]
