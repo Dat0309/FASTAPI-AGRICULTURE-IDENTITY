@@ -3,7 +3,7 @@ import os
 from dotenv import read_dotenv
 from pydantic import BaseSettings
 
-read_dotenv(dotenv='../../env/agriculture-product-identities-app.env')
+read_dotenv(dotenv='../../../env/agriculture-product-identities-app.env')
 
 
 class CommonSettings(BaseSettings):

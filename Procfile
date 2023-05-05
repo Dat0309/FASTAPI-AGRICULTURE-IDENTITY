@@ -1,1 +1,1 @@
-web: gunicorn fast-api.wsgi --log-file -
+web: gunicorn wsgi:app --log-file -
