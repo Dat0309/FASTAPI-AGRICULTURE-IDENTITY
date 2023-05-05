@@ -1,16 +1,10 @@
-import cloudinary
+
 import uvicorn
 from core.config import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from db.database_utils import connect_to_mongo, close_mongo_connection
-
-cloudinary.config(
-    cloud_name=settings.CLOUD_NAME,
-    api_key=settings.API_KEY,
-    api_secret=settings.API_SECRET
-)
 
 
 app = FastAPI(
