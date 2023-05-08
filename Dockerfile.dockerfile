@@ -12,6 +12,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY /fast_api .
 
-CMD [ "python", "main.py"]
+CMD [ "python", "wsgi.py"]
 
 EXPOSE 8080
