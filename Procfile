@@ -1,1 +1,1 @@
-web: python main.py runserver --log-file -
+web: gunicorn fast_api.wsgi --log-file -
