@@ -30,3 +30,17 @@ async def recognition(file: bytes = File()):
     end = time.time()
     return {'result': result, 'time': float(end-start)}
 
+@router.post('/multi-recognition')
+async def multi_recognition(file: bytes = File()):
+    start = time.time()
+    files = file.split(',')
+    images = []
+    for i in range(len(files)):
+        img = Image.open(io.BytesIO(i))
+        img_resize = img.resize((180, 180))
+        images.append(img_resize)
+
+    result = await agricultureRecognitionCtrl.multi_recognition(images)
+    end = time.time()
+    return {'result': result, 'time': float(end-start)}
+

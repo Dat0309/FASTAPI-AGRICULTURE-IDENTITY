@@ -51,13 +51,23 @@ class AgricultureRecognition():
 
         prediction = self.p.predict(test_img)[0]
         pred = np.argmax(prediction)
-        percent_pred = 1000 * prediction / np.sum(prediction)
-        max_percent_pred = sorted(percent_pred)
+        percent_pred = -1000 * prediction / np.sum(prediction)
+        max_percent_pred = sorted(percent_pred, reverse=True)
 
         results.append(
             {
-                'common_name': '{}: {:.2f}%'.format(self.classes_name[pred],max_percent_pred[pred])
+                'common_name': '{}: {:.2f}%'.format(self.classes_name[pred],max_percent_pred[0])
             }
         )
 
+        return results
+
+    def multi_predict(self, images):
+        self.p = tf.keras.models.load_model('data_file/agriculture_model.h5')
+        results = []
+
+        for i in range(len(images)):
+            result = self.predict(images[i])
+            results.append(results)
+        
         return results

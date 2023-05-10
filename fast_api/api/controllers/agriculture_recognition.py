@@ -20,3 +20,7 @@ class AgricultureRecognitionController(metaclass=SingletonMeta):
     async def recognition(self, image):
         objs = self.agricultureRecognition.predict(image)
         return objs
+    
+    async def multi_recognition(self, images):
+        objs = self.agricultureRecognition.multi_predict(images)
+        return objs
