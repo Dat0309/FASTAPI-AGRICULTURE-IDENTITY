@@ -20,6 +20,10 @@ class AgricultureRecognition():
         self.resnet = InceptionResnetV1(pretrained='vggface2').eval()
         self.max_elements = settings.MAX_ELEMENTS
         self.p = None
+        self.fruit_md = tf.keras.models.load_model('data_file/fruit_model.h5')
+        self.leaf_md = tf.keras.models.load_model('data_file/leaf_model.h5')
+        self.bark_md = tf.keras.models.load_model('data_file/bark_model.h5')
+        self.flower_md = tf.keras.models.load_model('data_file/flower_model.h5')
         self.trans_data_augmentation = transforms.Compose([
             transforms.Resize((180, 180)),
             transforms.RandomHorizontalFlip(p=0.5),
@@ -42,14 +46,14 @@ class AgricultureRecognition():
     def trans_for_recognition(self, img):
         return self.trans_default(img).unsqueeze(0)
 
-    def predict(self, image):
-        self.p = tf.keras.models.load_model('data_file/agriculture_model.h5')
+    def predict(self, image, model):
+
         results = []
 
         x = tf.keras.preprocessing.image.img_to_array(image)
         test_img = np.expand_dims(x, axis=0)
 
-        prediction = self.p.predict(test_img)[0]
+        prediction = model.predict(test_img)[0]
         pred = np.argmax(prediction)
         percent_pred = -1000 * prediction / np.sum(prediction)
         max_percent_pred = sorted(percent_pred, reverse=True)
@@ -63,11 +67,21 @@ class AgricultureRecognition():
         return results
 
     def multi_predict(self, images):
-        self.p = tf.keras.models.load_model('data_file/agriculture_model.h5')
         results = []
 
         for i in range(len(images)):
-            result = self.predict(images[i])
-            results.append(results)
+            if images[i]['key'] == 'fruit':
+                result = self.predict(images[i]['file'],self.fruit_md)
+                results.append(result)
+            elif images[i]['key'] == 'flower':
+                result = self.predict(images[i]['file'],self.flower_md)
+                results.append(result)
+            elif images[i]['key'] == 'leaf':
+                result = self.predict(images[i]['file'],self.leaf_md)
+                results.append(result)
+            elif images[i]['key'] == 'bark':
+                result = self.predict(images[i]['file'],self.bark_md)
+                results.append(result)
+
         
         return results
