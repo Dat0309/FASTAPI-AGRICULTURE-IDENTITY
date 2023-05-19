@@ -39,20 +39,20 @@ async def multi_recognition(leaf: bytes = File(), fruit: bytes = File(), flower:
         img = Image.open(io.BytesIO(leaf))
         img_resize = img.resize((180, 180))
         images.append({'file': img_resize, 'key': 'leaf'})
-    elif(fruit):
+    if(fruit):
         img = Image.open(io.BytesIO(fruit))
         img_resize = img.resize((180, 180))
         images.append({'file': img_resize, 'key': 'fruit'})
-    elif(flower):
+    if(flower):
         img = Image.open(io.BytesIO(flower))
         img_resize = img.resize((180, 180))
         images.append({'file': img_resize, 'key': 'flower'})
-    elif(bark):
+    if(bark):
         img = Image.open(io.BytesIO(bark))
         img_resize = img.resize((180, 180))
         images.append({'file': img_resize, 'key': 'bark'})
 
     result = await agricultureRecognitionCtrl.multi_recognition(images)
     end = time.time()
-    return {'result': result, 'time': float(end-start)}
+    return {'results': result, 'time': float(end-start)}
 

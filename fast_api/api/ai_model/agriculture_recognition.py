@@ -38,7 +38,17 @@ class AgricultureRecognition():
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
         ])
-        self.classes_name = ['Alpinia officinarum', 'Ananas comosus', 'Apple', 'Apple leaf', 'Asteraceae', 'Banana', 'Blueberry leaf', 'Brassicaceae1', 'Brassicaceae2', 'Cabbage soup', 'Camellia sinensis', 'Cherry', 'Cherry leaf', 'Chickoo fruit', 'Coffea arabica', 'Daisy', 'Dandelion', 'Daucus carota subsp', 'Grape leaf', 'Grapes fruit', 'Hydrangea', 'Iridaceae', 'Kiwi fruit', 'Lavandula angustifolia', 'Lily', 'Mango fruit', 'Narcissus tazetta L', 'Orange fruit', 'Peach leaf', 'Pepper leaf', 'Perilla frutescens', 'Piper sarmentosum', 'Potato', 'Potato leaf', 'Raspberry leaf', 'Rose', 'Shiitake mushroom', 'Solanum lycopersicum', 'Soybean leaf', 'Strawberry fruit', 'Strawberry leaf', 'Sunflower', 'Tithonia diversifolia', 'Tomato leaf', 'Tulip', 'Unknow']
+        self.fruit_name = ['Ananas comosus', 'Apple', 'Apricot', 'Avocado', 'Banana', 'Bell Pepper', 'Bitter gourd', 'Black berry', 'Cabbage soub', 'Camellia sinensis', 'Carica Papaya',
+                           'Cherry', 'Chickoo', 'Coffea arabica', 'Corn', 'Cucumber', 'Custard apple', 'Daucus carota subsp', 'Durian', 'Eggplant', 'Grape', 'Guava', 'Kiwi', 'Mango', 'Melon', 'Orange', 
+                           'Peach', 'Persimmon', 'Plum', 'Potato', 'Pumpkin', 'Rambutan', 'Solanum lycopersicum', 'Soybean', 'Strawberry', 'Turnip', 'Watermelon']
+        self.leaf_name = ['Ananas comosus', 'Apple', 'Apricot', 'Asteraceae', 'Avocado', 'Banana', 'Bell pepper', 'Bitter gourd', 'Black berry', 'Blueberry', 'Brassicaceae', 'Cabbage soup', 'Camellia sinensis',
+                           'Carica Papaya', 'Cherry', 'Chickoo', 'Coffea arabica', 'Corn', 'Cucumber', 'Custard apple', 'Daisy', 'Durian', 'Eggplant', 'Grape', 'Guava', 'Hydrangea', 'Kiwi', 'Lavandula angustifolia', 
+                           'Lily', 'Mango', 'Melon', 'Mint leaves', 'Orange', 'Peach', 'Pepper', 'Persimmon', 'Plum', 'Potato', 'Pumpkin', 'Rambutan', 'Raspberry', 'Rose', 'Solanum lycopersicum', 'Soybean', 'Squash',
+                             'Strawberry', 'Sunflower', 'Tomato', 'Tulip', 'Turnip', 'Watermelon']
+        self.flower_name = ['Apple', 'Banana', 'Camellia sinensis', 'Chickoo', 'Coffea arabica', 'Cucumber', 'Daisy', 'Dandelion', 'Dill', 'Durian', 'Hydrangea', 'Iridaceae', 'Lavandula angustifolia', 'Lily', 'Mango',
+                            'Mint leaves', 'Orange', 'Parsley leaves', 'Peach', 'Persimmon', 'Potato', 'Rose', 'Rosemary leaves', 'Solanum lycopersicum', 'Strawberry', 'Sunflower', 'Tulip']
+        self.bark_name = ['Apple', 'Apricot', 'Asteraceae', 'Avocado', 'Banana', 'Cabbage soup', 'Camellia sinensis', 'Carica Papaya', 'Cherry', 'Chickoo', 'Coffea arabica', 'Custard apple',
+                          'Daisy', 'Durian', 'Guava', 'Kiwi', 'Lavandula angustifolia', 'Lily', 'Mango', 'Orange', 'Peach', 'Persimmon', 'Plum', 'Potato', 'Rambutan', 'Rose', 'Solanum lycopersicum', 'Strawberry']
 
     def trans_for_train(self, img):
         return self.trans_data_augmentation(img).unsqueeze(0)
@@ -46,42 +56,37 @@ class AgricultureRecognition():
     def trans_for_recognition(self, img):
         return self.trans_default(img).unsqueeze(0)
 
-    def predict(self, image, model):
-
-        results = []
-
+    def predict(self, image, model, classes_name, key):
         x = tf.keras.preprocessing.image.img_to_array(image)
         test_img = np.expand_dims(x, axis=0)
 
         prediction = model.predict(test_img)[0]
         pred = np.argmax(prediction)
-        percent_pred = -1000 * prediction / np.sum(prediction)
+        percent_pred = -100 * prediction / np.sum(prediction)
         max_percent_pred = sorted(percent_pred, reverse=True)
 
-        results.append(
-            {
-                'common_name': '{}: {:.2f}%'.format(self.classes_name[pred],max_percent_pred[0])
+        result = {
+                'key': key,
+                'common_name': '{}: {:.2f}%'.format(classes_name[pred],max_percent_pred[0])
             }
-        )
 
-        return results
+        return result
 
     def multi_predict(self, images):
         results = []
 
         for i in range(len(images)):
             if images[i]['key'] == 'fruit':
-                result = self.predict(images[i]['file'],self.fruit_md)
+                result = self.predict(images[i]['file'],self.fruit_md, self.fruit_name, 'fruit')
                 results.append(result)
             elif images[i]['key'] == 'flower':
-                result = self.predict(images[i]['file'],self.flower_md)
+                result = self.predict(images[i]['file'],self.flower_md, self.flower_name, 'flower')
                 results.append(result)
             elif images[i]['key'] == 'leaf':
-                result = self.predict(images[i]['file'],self.leaf_md)
+                result = self.predict(images[i]['file'],self.leaf_md, self.leaf_name, 'leaf')
                 results.append(result)
             elif images[i]['key'] == 'bark':
-                result = self.predict(images[i]['file'],self.bark_md)
+                result = self.predict(images[i]['file'],self.bark_md, self.bark_name, 'bark')
                 results.append(result)
-
         
         return results
