@@ -67,7 +67,8 @@ class AgricultureRecognition():
 
         result = {
                 'key': key,
-                'common_name': '{}: {:.2f}%'.format(classes_name[pred],max_percent_pred[0])
+                'common_name': '{}'.format(classes_name[pred]),
+                'percent': '{:.2f}%'.format(max_percent_pred[0])
             }
 
         return result
