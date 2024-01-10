@@ -31,7 +31,7 @@ async def recognition(file: bytes = File()):
     return {'result': result, 'time': float(end-start)}
 
 @router.post('/multi-recognition')
-async def multi_recognition(leaf: bytes = File(), fruit: bytes = File(), flower: bytes = File(), bark: bytes = File()):
+async def multi_recognition(leaf: bytes = File(default=None), fruit: bytes = File(default=None), flower: bytes = File(default=None), bark: bytes = File(default=None)):
     start = time.time()
     images = []
 

@@ -68,7 +68,7 @@ class AgricultureRecognition():
         result = {
                 'key': key,
                 'common_name': '{}'.format(classes_name[pred]),
-                'percent': '{:.2f}%'.format(max_percent_pred[0])
+                'percent': '{:.2f}'.format(max_percent_pred[0])
             }
 
         return result
@@ -90,4 +90,16 @@ class AgricultureRecognition():
                 result = self.predict(images[i]['file'],self.bark_md, self.bark_name, 'bark')
                 results.append(result)
         
-        return results
+        final_results = {}
+
+        for item in results:
+            common_name = item['common_name']
+            percent = float(item['percent'])
+            if common_name in final_results:
+                final_results[common_name]['percent'] += float(percent)
+            else:
+                final_results[common_name] = {'common_name': common_name, 'percent': percent}
+
+        final_results = list(final_results.values())
+        
+        return final_results
